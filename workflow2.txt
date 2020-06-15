@@ -1,0 +1,91 @@
+package com.yammer.dropwizard.workFlowDirectory;
+
+import com.flipkart.accounting.codegen.annotation.Workflow;
+import com.flipkart.accounting.codegen.entities.CommerceActivity;
+import com.flipkart.accounting.codegen.entities.Context;
+import com.flipkart.accounting.codegen.entities.Message;
+import java.util.logging.Logger;
+
+/** @author Atul Kumar , Date : 27/11/19 */
+@Workflow(id = "2")
+public class HelloWorldWorkflow {
+    private static final Logger log = Logger.getLogger(HelloWorldWorkflow.class.getSimpleName());
+
+    /**
+     * Start Node
+     * @param commerceActivity Commerce Activity
+     * @return Context
+     */
+    @Step(
+            id = "r1",
+            systemName =  "EKL",
+            type = "2")
+    public Context startSomething(CommerceActivity commerceActivity) {
+        log.info("This is the root node of all the activities");
+        return new Context();
+    }
+
+    /**
+     * Pretend To Do Something Node
+     *
+     * @param context Context
+     * @return Context
+     */
+    @Step(
+            id = "n1",
+            depends = {"r1"},
+            systemName = "EKL",
+            type = "2")
+    public Context pretendToDoSomething(Context context) {
+        log.info("This is the pretendToDoSomething node of all the activities");
+        return context;
+    }
+
+    /**
+     * Bla Node
+     *
+     * @param context Context
+     * @return Context
+     */
+    @Step(
+            id = "n2",
+            depends = {"r1"},
+            systemName =  "PartnerSystem",
+            type = "3")
+    public Context bla(Context context) {
+        log.info("This is the bla node of all the activities");
+        return context;
+    }
+
+    /**
+     * Say Hi Node
+     *
+     * @param context Context
+     * @return Message
+     */
+    @Step(
+            id = "l1",
+            depends = {"n1"},
+            systemName =  "Output",
+            type = "2")
+    public Message sayHi(Context context) {
+        log.info("This is the sayHi node of all the activities");
+        return new helloWorldMessage("This is the sayHi node of all the activities");
+    }
+
+    /**
+     * Say Bye Node
+     *
+     * @param context Context
+     * @return Message
+     */
+    @Step(
+            id = "l2",
+            depends = {"n1", "n2"},
+            systemName = "Output",
+            type = "2")
+    public Message sayBye(Context context) {
+        log.info("This is the sayBye node of all the activities");
+        return new helloWorldMessage("This is the sayBye node of all the activities");
+    }
+}
