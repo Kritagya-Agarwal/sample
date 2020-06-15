@@ -1,0 +1,134 @@
+package com.yammer.dropwizard.workFlowDirectory;
+
+import com.flipkart.accounting.codegen.annotation.Workflow;
+import com.flipkart.accounting.codegen.entities.CommerceActivity;
+import com.flipkart.accounting.codegen.entities.Context;
+import com.flipkart.accounting.codegen.entities.Message;
+import java.util.logging.Logger;
+
+/** @author Atul Kumar , Date : 27/11/19 */
+@Workflow(id = "1")
+public class HelloWorldWorkflow {
+    private static final Logger log = Logger.getLogger(HelloWorldWorkflow.class.getSimpleName());
+
+    /**
+     * Shipment Dispatch
+     *
+     * @param commerceActivity Commercce Activity
+     * @return Context
+     */
+    @Step(
+            id = "r1",
+            systemName = "FKN",
+            type = "2")
+    public Context shipmentDispatch(CommerceActivity commerceActivity) {
+        log.info("This is the Start Node");
+        return new Context();
+    }
+
+    /**
+     * Enrich Order Details
+     *
+     * @param context Context
+     * @return context
+     */
+    @Step(
+            id = "r2",
+            depends = {"r1"},
+            systemName = "FKN",
+            type = "4")
+    public Context enrichDetails(Context context) {
+        return new Context();
+    }
+
+    /**
+     * OMS Processing
+     *
+     * @param context Context
+     * @return context
+     */
+    @Step(
+            id = "r3",
+            depends = {"r2"},
+            systemName = "PartnerSystem",
+            type = "3")
+    public Context processOMS(Context context) {
+        return new Context();
+    }
+
+    /**
+     * Check Payment Type
+     *
+     * @param context Context
+     * @return context
+     */
+    @Step(
+            id = "r4",
+            depends = {"r2"},
+            systemName = "FKN",
+            type = "1")
+    public Context processType(Context context) {
+        return new Context();
+    }
+
+    /**
+     * Create PDN
+     *
+     * @param context Context
+     * @return context
+     */
+    @Step(
+            id = "r5",
+            depends = {"r4"},
+            systemName = "FKN",
+            type = "4")
+    public Context createPDN(Context context) {
+        return new Context();
+    }
+
+    /**
+     * Report PDN in FKMP
+     *
+     * @param context Context
+     * @return context
+     */
+    @Step(
+            id = "r6",
+            depends = {"r5"},
+            systemName = "Output",
+            type = "2")
+    public Context reportFKMP(Context context) {
+        return new Context();
+    }
+
+    /**
+     * Seller Disbursement
+     *
+     * @param context Context
+     * @return context
+     */
+    @Step(
+            id = "r7",
+            depends = {"r5"},
+            systemName = "Output",
+            type = "2")
+    public Context seller(Context context) {
+        return new Context();
+    }
+
+    /**
+     * Seller Dashboard
+     *
+     * @param context Context
+     * @return context
+     */
+    @Step(
+            id = "r8",
+            depends = {"r5"},
+            systemName = "Output",
+            type = "2")
+    public Context sellerDashboard(Context context) {
+        return new Context();
+    }
+
+}
